@@ -1,346 +1,1167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAP Writing Examination - Interactive Practice</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .input-box { border-bottom: 2px solid #3b82f6; outline: none; background: transparent; text-align: center; padding: 0 5px; font-weight: 600; color: #1e40af; width: 120px; transition: border-color 0.3s; }
-        .input-box:focus { border-bottom: 2px solid #1d4ed8; background-color: #eff6ff; }
-        .correct { border-bottom: 2px solid #10b981; color: #047857; background-color: #d1fae5; }
-        .incorrect { border-bottom: 2px solid #ef4444; color: #b91c1c; background-color: #fee2e2; }
-        .line-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e5e7eb; padding: 8px 0; }
-        .line-text { flex-grow: 1; padding-right: 15px; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; padding: 15px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .word-badge { background-color: #e2e8f0; padding: 5px 12px; border-radius: 9999px; font-size: 0.9rem; color: #334155; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="An interactive English for Academic Purposes writing practice paper and marking workspace.">
+<title>EAP Writing · Practice paper</title>
+<style>
+:root {
+  --ink:#202038; --muted:#5f6076; --accent:#4d39b5; --accent-dark:#3a2992;
+  --paper:#fff; --back:#f7f7fb; --lavender:#eeebfe; --line:#e0dfeb;
+  --good:#20674e; --good-bg:#e9f6ef; --warn:#874714; --warn-bg:#fff1de;
+  --bad:#962944; --bad-bg:#fcecf1; --radius:18px;
+  font-family:"DM Sans", "Segoe UI", sans-serif;
+  color:var(--ink); background:var(--back); font-size:16px; line-height:1.55;
+}
+*, *::before, *::after { box-sizing:border-box }
+[hidden] { display:none !important }
+body { margin:0; min-height:100vh }
+button,input,select,textarea { font:inherit }
+button { cursor:pointer }
+button:disabled { cursor:default; opacity:.52 }
+a { color:var(--accent) }
+:focus-visible { outline:3px solid #7863e0; outline-offset:3px }
+h1,h2,h3,p { margin:0 }
+h1,h2,h3 { line-height:1.13; letter-spacing:-.035em }
+h1 { font-size:clamp(2.15rem,5vw,3.55rem); font-weight:730 }
+h2 { font-size:clamp(1.48rem,3vw,2rem) }
+h3 { font-size:1.19rem }
+small,.small { font-size:.87rem }
+.muted { color:var(--muted) }
+.eyebrow { font-size:.76rem; font-weight:750; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-dark) }
+.wrap { width:min(1112px, calc(100% - 56px)); margin-inline:auto }
+.top { border-bottom:1px solid var(--line); background:var(--paper) }
+.top-inner { display:flex; align-items:center; justify-content:space-between; min-height:70px; gap:14px }
+.brand { display:inline-flex; align-items:center; gap:11px; border:0; padding:0; background:transparent; color:var(--ink); font-weight:750; letter-spacing:-.02em; white-space:nowrap }
+.brand-mark { display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:var(--accent); color:white; font-family:Georgia,serif; font-size:1.45rem; line-height:1 }
+.top-nav,.actions { display:flex; align-items:center; flex-wrap:wrap; gap:9px }
+.top-nav button { border:0; border-radius:8px; background:none; padding:8px 11px; color:var(--muted); font-size:.89rem; font-weight:650 }
+.top-nav button:hover,.top-nav button[aria-current=page] { color:var(--accent-dark); background:var(--lavender) }
+.nav-short { display:none }
+main { min-height:65vh; padding-block:42px 48px }
+.hero { isolation:isolate; overflow:hidden; position:relative; min-height:315px; display:flex; align-items:center; padding:47px 52px; border:1px solid #ded7ff; border-radius:24px; background:linear-gradient(112deg,#ede8ff 0%,#f3efff 63%,#e6defc 100%) }
+.hero-copy { max-width:620px; z-index:1 }
+.hero h1 { margin:9px 0 12px }
+.hero p:not(.eyebrow) { max-width:475px; color:#4f4967 }
+.hero-meta { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:23px; font-size:.87rem; font-weight:670; color:#44387a }
+.hero-meta span+span { padding-left:17px; border-left:1px solid #c9bdeb }
+.illustration { position:absolute; right:54px; bottom:0; width:235px; height:270px; pointer-events:none }
+.illustration::before { content:""; position:absolute; inset:34px 0 10px; border:1px solid #d7c9fc; border-radius:50%; box-shadow:0 0 0 22px #e0d6fa7a }
+.sheet { position:absolute; width:128px; height:171px; left:50px; top:48px; background:#d2c1f5; border:1px solid #c5afea; border-radius:13px; transform:rotate(16deg) }
+.sheet.front { background:#fcfaff; border-color:#ccbced; top:42px; left:45px; transform:rotate(-10deg); box-shadow:0 10px 22px #4d2d8122; display:grid; align-content:start; gap:13px; padding:18px }
+.sheet.front b { font:700 2.45rem/1 Georgia,serif; color:#6348bb; letter-spacing:-.09em }
+.sheet.front i { height:3px; border-radius:5px; background:#dbd0f9 }
+.sheet.front i:last-child { width:62% }
+.pen { position:absolute; width:11px; height:124px; left:186px; top:104px; transform:rotate(36deg); border-radius:6px 6px 2px 2px; background:linear-gradient(90deg,#6047af 53%,#8062d4 53%); box-shadow:0 5px 11px #28176020 }
+.pen::after { content:""; position:absolute; bottom:-10px; border:solid transparent; border-width:11px 5.5px 0; border-top-color:#6047af }
+.role-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:19px }
+.card,.panel,.stat,.callout { background:var(--paper); border:1px solid var(--line); border-radius:var(--radius) }
+.role-card { padding:25px 26px; display:grid; gap:12px; align-content:start }
+.role-card p { max-width:42ch }
+.role-card .btn { justify-self:start; margin-top:5px }
+.tile-icon { width:40px; height:40px; display:grid; place-items:center; border-radius:10px; background:var(--lavender); color:var(--accent-dark); font-size:1.29rem; font-weight:700 }
+.tile-icon.teacher { background:#e8f3ee; color:#24624e }
+.btn { display:inline-flex; justify-content:center; align-items:center; gap:8px; padding:9px 15px; min-height:42px; border:1px solid transparent; border-radius:9px; font-weight:690; color:#fff; background:var(--accent); text-decoration:none }
+.btn:hover:not(:disabled) { background:var(--accent-dark) }
+.btn.secondary { color:var(--accent-dark); background:var(--paper); border-color:#d4c9fa }
+.btn.secondary:hover:not(:disabled) { background:var(--lavender) }
+.btn.ghost { background:transparent; color:var(--accent-dark); padding-inline:9px }
+.btn.ghost:hover:not(:disabled) { background:var(--lavender) }
+.btn.danger { color:var(--bad); background:#fff; border-color:#efc3ce }
+.btn.danger:hover:not(:disabled) { background:var(--bad-bg) }
+.panel { padding:clamp(17px,3.5vw,34px) }
+.narrow { max-width:710px; margin-inline:auto }
+.stack { display:grid; gap:17px }
+.stack-tight { display:grid; gap:8px }
+.page-head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:19px }
+.page-head h1 { font-size:clamp(2rem,4vw,3.05rem); margin-block:4px 6px }
+.page-head p { max-width:64ch }
+.notice,.callout { padding:13px 15px; background:#f0edfc; color:#423675; border:1px solid #e1d9ff; border-radius:11px }
+.notice:empty { display:none }
+.notice.error { background:var(--bad-bg); color:var(--bad); border-color:#f4cbd6 }
+.notice.ok { background:var(--good-bg); color:var(--good); border-color:#cce7d7 }
+.notice.warn { background:var(--warn-bg); color:var(--warn); border-color:#f4d8b2 }
+.home-note { margin-top:17px; padding:0 3px }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px }
+.field { display:grid; gap:5px; align-content:start; font-weight:620 }
+.field .small { font-weight:400 }
+input,select,textarea { color:var(--ink); border:1px solid #bcbad0; border-radius:8px; padding:9px 11px; background:var(--paper); min-width:0; max-width:100% }
+input[type=radio] { accent-color:var(--accent); width:1.15rem; height:1.15rem; flex:none; margin:3px 0 0 }
+textarea { width:100%; resize:vertical }
+fieldset { margin:0; padding:0; border:0; min-width:0 }
+legend { padding:0; margin-bottom:8px; font-weight:700 }
+.test-layout { display:grid; grid-template-columns:236px minmax(0,1fr); align-items:start; gap:18px }
+.exam-side { display:grid; gap:13px; padding:13px; position:sticky; top:12px }
+.clock { padding:11px 12px; background:var(--lavender); border-radius:10px; display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--accent-dark) }
+.clock.urgent { color:var(--bad); background:var(--bad-bg) }
+.clock strong { font-size:1.16rem; font-variant-numeric:tabular-nums }
+.section-nav { display:grid; gap:5px }
+.section-nav button { width:100%; border:1px solid transparent; display:flex; align-items:center; text-align:left; gap:9px; color:var(--muted); background:white; border-radius:9px; padding:9px; font-size:.86rem; font-weight:630 }
+.section-nav button:hover,.section-nav button[aria-current=step] { background:var(--lavender); color:var(--accent-dark); border-color:#e5ddfb }
+.section-nav .nav-num { min-width:1.55rem; height:1.55rem; display:grid; place-items:center; border-radius:6px; background:#f3f2f8; color:var(--accent-dark) }
+.section-nav small { margin-left:auto; white-space:nowrap; font-size:.72rem; font-variant-numeric:tabular-nums }
+.section-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px }
+.section-top h2 { margin-top:4px }
+.pill { display:inline-block; white-space:nowrap; width:max-content; padding:4px 9px; border-radius:999px; background:var(--lavender); color:var(--accent-dark); font-size:.76rem; font-weight:750 }
+.pill.good { background:var(--good-bg); color:var(--good) }
+.pill.pending { background:var(--warn-bg); color:var(--warn) }
+.passage { max-width:75ch; line-height:2.85 }
+.passage p+p { margin-top:9px }
+.gap { display:inline-flex; white-space:nowrap; gap:4px; align-items:center; vertical-align:baseline; margin-inline:2px; line-height:1.4 }
+.qnum { color:var(--accent-dark); font-size:.76rem; font-weight:750; font-variant-numeric:tabular-nums }
+.gap input,.gap select { width:119px; padding:5px 7px; font-size:.91rem; background:#faf9ff }
+.gap select { width:139px }
+.word-bank { display:flex; gap:5px; flex-wrap:wrap }
+.word-bank span { background:#f1eff8; border-radius:7px; padding:2px 8px; font-size:.84rem }
+.word-bank .used { color:#555467; text-decoration:line-through; background:#f5f5f8 }
+.question-list { display:grid; padding-left:0; margin:0; list-style:none }
+.question-list li { display:grid; grid-template-columns:25px minmax(0,1fr) auto; align-items:center; gap:9px; border-bottom:1px solid #eeedf4; padding:9px 0; line-height:1.5 }
+.question-list li .gap .qnum { display:none }
+.question-list .root { min-width:86px; text-align:center }
+.example { border-left:3px solid #c5b4ef; padding:7px 11px; color:#504668; background:#f9f7ff; border-radius:0 7px 7px 0 }
+.topic-card { display:flex; gap:9px; align-items:flex-start; background:#faf9fe; border:1px solid var(--line); padding:13px; border-radius:10px; cursor:pointer }
+.topic-card:has(input:checked) { border-color:#8c76e2; background:#f1ecff }
+.topic-card strong { display:block; margin-bottom:3px }
+.essay-box { min-height:280px; line-height:1.65 }
+.exam-actions { display:flex; justify-content:space-between; gap:9px; border-top:1px solid var(--line); padding-top:15px; flex-wrap:wrap }
+.completion-mark { display:grid; place-items:center; color:var(--good); background:var(--good-bg); font-size:1.5rem; width:44px; height:44px; border-radius:50% }
+.toolbar,.tabs { display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.tabs { margin-bottom:17px; padding:5px; background:#eae8f4; border-radius:11px; width:fit-content }
+.tabs button { border:0; border-radius:8px; color:var(--muted); background:transparent; font-weight:680; padding:7px 12px }
+.tabs button[aria-current=page] { color:var(--accent-dark); background:white; box-shadow:0 1px 4px #2b23531a }
+.stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px }
+.stat { padding:13px 15px; display:grid; gap:3px }
+.stat strong { font-size:1.65rem; line-height:1.2; letter-spacing:-.035em; font-variant-numeric:tabular-nums }
+.table-wrap { overflow:auto; border:1px solid var(--line); border-radius:11px }
+table { width:100%; border-collapse:collapse; font-size:.9rem; text-align:left }
+th { color:#4d4666; background:#f2eff9; font-weight:700 }
+th,td { padding:9px 11px; vertical-align:top }
+td { border-top:1px solid var(--line) }
+td .btn { font-size:.86rem; min-height:34px; padding:4px 10px }
+td,dd { overflow-wrap:anywhere }
+.empty { border:1px dashed #c9c3dc; border-radius:12px; text-align:center; padding:32px 20px; background:#faf9fe }
+.empty p { margin-top:6px }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:13px; align-items:start }
+.bar-row { display:grid; grid-template-columns:minmax(100px,145px) minmax(35px,1fr) 58px; gap:9px; align-items:center; font-size:.88rem }
+.bar-track { height:10px; border-radius:8px; background:#edebf7; overflow:hidden }
+.bar-track span { display:block; background:#7258d0; border-radius:8px; height:100% }
+.bar-row strong { text-align:right; font-variant-numeric:tabular-nums }
+details { border:1px solid var(--line); border-radius:10px; padding:10px 13px; background:#fbfaff }
+details+details { margin-top:8px }
+summary { cursor:pointer; font-weight:700; color:var(--accent-dark) }
+.essay-copy { max-width:76ch; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.75; margin-block:10px 3px }
+.key-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px }
+.key-grid div { padding:5px 8px; background:#f2effa; border-radius:6px; overflow-wrap:anywhere; font-size:.88rem }
+.rubric { display:grid; gap:5px; padding-left:20px; margin:0 }
+dialog { border:1px solid var(--line); border-radius:20px; padding:0; width:min(800px,calc(100% - 28px)); max-height:90vh; color:var(--ink); background:var(--paper); box-shadow:0 18px 60px #2418464d }
+dialog::backdrop { background:#27203d8a }
+dialog.small-dialog { width:min(525px,calc(100% - 28px)) }
+.dialog-body { padding:clamp(16px,4vw,28px) }
+.dialog-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px }
+.dialog-head h2 { overflow-wrap:anywhere }
+.footer { color:var(--muted); border-top:1px solid var(--line); padding:16px 0 22px; font-size:.8rem }
+.footer .wrap { display:flex; justify-content:space-between; gap:8px 18px; flex-wrap:wrap }
+.skip { position:absolute; z-index:5; left:12px; top:-80px }
+.skip:focus { top:10px }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
+@media (max-width:900px) {
+  .illustration { right:27px; opacity:.68; transform:scale(.8); transform-origin:right bottom }
+  .hero-copy { max-width:calc(100% - 125px) }
+  .test-layout { grid-template-columns:190px minmax(0,1fr); gap:11px }
+  .stats { grid-template-columns:repeat(2,minmax(0,1fr)) }
+}
+@media (max-width:660px) {
+  .wrap { width:calc(100% - 28px) }
+  .top-inner { min-height:59px }
+  .top-nav { gap:2px }
+  .top-nav button { padding-inline:7px; font-size:.8rem }
+  .nav-full { display:none }
+  .nav-short { display:inline }
+  main { padding-block:22px 32px }
+  .hero { min-height:0; padding:27px 20px; border-radius:17px }
+  .hero-copy { max-width:100% }
+  .illustration { display:none }
+  .hero-meta { gap:5px 12px }
+  .hero-meta span+span { padding-left:11px }
+  .role-grid,.test-layout,.split,.form-grid { grid-template-columns:minmax(0,1fr) }
+  .role-grid { gap:10px; margin-top:11px }
+  .role-card { padding:19px }
+  .exam-side { position:static }
+  .passage { line-height:2.25 }
+  .gap input { width:100px }
+  .gap select { width:127px }
+  .section-nav { grid-template-columns:repeat(5,minmax(0,1fr)); gap:3px }
+  .section-nav button { display:grid; place-items:center; justify-content:initial; padding:5px 2px; gap:3px }
+  .section-nav .nav-name { display:none }
+  .section-nav small { margin-left:0 }
+  .question-list li { grid-template-columns:22px minmax(0,1fr); gap:5px }
+  .question-list li > :last-child { grid-column:2 }
+  .question-list li .root { justify-self:start }
+  .key-grid { grid-template-columns:repeat(2,minmax(0,1fr)) }
+}
+</style>
 </head>
-<body class="bg-gray-100 min-h-screen pb-12">
+<body>
+<a class="skip btn" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-inner">
+    <button class="brand" id="home-link" type="button" aria-label="EAP Writing home">
+      <span class="brand-mark" aria-hidden="true">W</span><span>EAP Writing</span>
+    </button>
+    <nav class="top-nav" aria-label="Main">
+      <button type="button" id="student-link" aria-label="Student exam"><span class="nav-full">Student exam</span><span class="nav-short">Student</span></button>
+      <button type="button" id="teacher-link" aria-label="Teacher dashboard"><span class="nav-full">Teacher dashboard</span><span class="nav-short">Teacher</span></button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="main" tabindex="-1">
+  <div id="storage-notice" class="notice warn small" role="status" hidden style="margin-bottom:12px"></div>
+  <div id="screen"></div>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <span>Adapted from EAP Writing V1 2324, Semester 2.</span>
+    <span>Original paper and answer key © 2024 Northern Consortium UK Ltd.</span>
+  </div>
+</footer>
+<dialog id="dialog" aria-labelledby="dialog-title"></dialog>
+<script>
+"use strict";
 
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-5xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">EAP Writing Examination</h1>
-                <p class="text-sm text-gray-500">NCUK Interactive Practice (V1 23/24)</p>
-            </div>
-            <div id="score-display" class="hidden text-xl font-bold px-4 py-2 bg-blue-100 text-blue-800 rounded-lg">
-                Score: <span id="score-val">0</span> / 40
-            </div>
+const PAPER = "eap-writing-v1-2324";
+const LIMIT = 90 * 60 * 1000;
+const MIN_WORDS = 250;
+const SECTIONS = [
+  { name:"Open gap fill", detail:"Questions 1–10", marks:10 },
+  { name:"Word bank", detail:"Questions 11–20", marks:10 },
+  { name:"Error correction", detail:"Questions 21–30", marks:10 },
+  { name:"Word formation", detail:"Questions 31–40", marks:10 },
+  { name:"Essay writing", detail:"Writing task", marks:60 }
+];
+const KEY = [
+  ["to"],["for"],["with"],["by"],["that","which"],["it","this"],["the","any"],["where"],["is"],["those","ones","customers"],
+  ["generated"],["experiences"],["achieves"],["accessible"],["changes"],["concerns"],["expensive"],["worry"],["limit"],["replace"],
+  ["being"],["are","appear","seem"],["means"],["on"],["be"],["an"],["impact"],["which","that"],["these"],["for","to"],
+  ["encountered"],["revolutionizing","revolutionising"],["unambiguous"],["rejection"],["consultation"],["incapable"],["negatively"],["dominant"],["adjustment"],["irrational"]
+];
+const OPEN_PASSAGE = [
+  "The field of consumer behaviour examines how consumers make choices, how they interact with products or services, and how they respond {1} marketing activity.",
+  "Being able to understand this is important {2} businesses. Firstly, understanding consumer behaviour helps us to work out what's popular in the market. We can unearth what the public prefers and also any emerging trends. This helps us keep our products or services in line {3} consumer demands. It also helps us create new, innovative products. What is more, {4} determining consumer preferences and patterns of use, we can create products {5} better cater to consumer needs.",
+  "Finally, {6} helps us to promote products appropriately. We can use {7} knowledge we gain to create promotions and adverts that people like and we can place them strategically {8} people are most likely to see them. However, understanding consumer behaviour {9} not solely about acquiring new customers, it is also about retaining {10} we already have. Once we understand what makes customers happy, we are able to keep them coming back for more."
+];
+const BANK_PASSAGE = [
+  "The integration of Artificial Intelligence (AI) into education has {11} both advantages and problems. On the positive side, AI brings the promise of personalized learning {12}, catering to individual student’s needs. It {13} this by being able to adapt lessons and exercises based on each student’s ability and learning speed. Furthermore, AI can make education more {14} for all students, but particularly for students with different learning needs, by offering tailored support and appropriate {15} to learning material.",
+  "However, the introduction of AI also raises {16}. The digital divide is one issue, as not all students have equal access to AI tools. In addition to this, implementing AI in education can be prohibitively {17} for some institutions which may in turn lead to educational inequalities. There is also a {18} that if students rely too much on AI, it may {19} their ability to think critically and use problem-solving skills. Some people fear that AI might {20} educators, impacting on the overall quality of the learning experience."
+];
+const BANK = [
+  "limit","substitutes","achieves","made","changes","exchange","events","anxiety","accessible","concerns",
+  "basic","worry","experiences","generated","replace","cares","succeeds","extravagant","contain","expensive"
+];
+const CORRECTION = [
+  "be born and improvements in healthcare are helping people enjoy a",
+  "longer life. The implications of an ageing population huge. Firstly, it",
+  "mean that a growing number of elderly people will require assistance with",
+  "everyday activities. This places an increasingly high demand our already",
+  "strained support systems, highlighting that improvements need to made in",
+  "order to adequately meet these increasing needs. Secondly, a ageing population",
+  "can impacting on our economy. With fewer young people entering the",
+  "workforce, there may be labour shortages, what will affect economic",
+  "growth. To address all of challenges, careful planning is essential. Additionally,",
+  "promoting active and healthy ageing is important both individual well-being"
+];
+const FORMATION = [
+  ["While working on the project the team {31} some unexpected problems.","encounter"],
+  ["Advances in technology are {32} the way we communicate, connecting people across the globe in an instant.","revolution"],
+  ["The instructions were clear and {33}, so there should be no confusion about what needed to be done.","ambiguous"],
+  ["He proposed some new creative ideas at work but they were met with {34} from other colleagues.","reject"],
+  ["The doctor arranged a {35} with the patient to talk through treatment options.","consult"],
+  ["The back injury she sustained after the car accident left her {36} of performing her usual duties at work.","capable"],
+  ["Workers reacted {37} to the news that their pensions were going to be cut.","negative"],
+  ["Your {38} hand is the one you naturally perform most activities with.","dominate"],
+  ["A slight {39} was made to the recipe so both meat eaters and vegetarians could enjoy the food.","adjust"],
+  ["His fear of heights was {40}, but most phobias are!","rational"]
+];
+const TOPICS = {
+  A:{ name:"AI and jobs", prompt:"AI (artificial intelligence) technology is slowly taking over more and more jobs that could be done by humans. Governments should make laws now to protect jobs from this new technology. To what extent do you agree?" },
+  B:{ name:"A world language", prompt:"English should be the official world language. No other languages are necessary. To what extent do you agree with this statement?" }
+};
+const MODELS = {
+  A:[
+    {title:"Regulate how employers introduce AI", stance:"Substantial agreement", text:`Artificial intelligence can now perform tasks that once required trained employees, from drafting routine correspondence to answering customer enquiries. The speed at which these systems can be introduced gives workers little time to prepare for changes in their roles. I therefore largely agree that governments should make laws now to protect jobs, provided that the laws focus on how employers introduce AI and how workers can move into new roles.
+
+First, employers should be required to consult staff before using AI in ways likely to lead to substantial redundancies. Consider a bank that plans to introduce a chatbot and reduce the size of its call centre. Employees could explain which enquiries are too sensitive or complicated to automate and help identify duties that still require human judgement. A notice period would give workers time to plan, while consultation might lead the bank to redeploy some advisers to handle complex cases. For these reasons, the law should apply before a decision becomes difficult to reverse.
+
+Second, governments should require large employers to contribute to retraining where automation displaces staff. A warehouse worker whose stock-checking duties are automated could be offered paid time to learn how to monitor inventory systems. This approach would be especially valuable in towns where one large employer accounts for many jobs. Workers could gain skills while continuing to earn, and firms could draw on employees who already understand their operations.
+
+There are limits to this argument. A law preserving every current position would make it harder to use AI for beneficial tasks, such as screening documents for errors or handling paperwork that leaves medical staff less time with patients. The public interest is better served by rules requiring notice, consultation and support for redeployment. On balance, governments should legislate now so that employees have some control over how technological change affects their working lives.`},
+    {title:"Protect incomes and opportunities during automation", stance:"Limited agreement", text:`As artificial intelligence becomes more capable, employers will use it to carry out a wider range of activities. Some occupations will shrink as a result, and people who lose their jobs may face considerable hardship. I agree that governments need to respond now. However, I largely disagree with using legislation to preserve existing jobs, because doing so may prevent useful changes and direct public resources towards roles with little prospect of recovery.
+
+One difficulty is that it is hard to determine which jobs are being taken over by AI. For example, an accounting firm could use software to categorise expenses while keeping its staff to check unusual transactions and advise clients. Over time, recruits might spend less time entering data and more time interpreting it. A law that requires employers to show that a job has remained substantially the same could discourage this kind of reorganisation, even when the result would be better work for employees and better advice for clients.
+
+The strongest argument for job protection arises in communities with few alternative employers. If a local company abruptly automates its operations, affected households may lose income and local businesses may also suffer. A sensible response would combine early notice of large redundancies with temporary income support and training designed with nearby employers. For instance, workers who have maintained machinery could receive a short qualification that allows them to apply for maintenance positions in a different industry. Tying courses to actual vacancies would improve the chances of finding work.
+
+Governments should also review how the costs and benefits of automation are shared. If productivity gains chiefly reach shareholders, funding transition programmes through general taxation can allow more workers to benefit. Overall, I favour legal protections that give people time and resources to find suitable employment, while allowing employers to adopt technology that improves the services they provide.`}
+  ],
+  B:[
+    {title:"English as a shared language alongside others", stance:"Partial agreement", text:`English is widely used when people from different countries study, work or travel together. This gives some grounds for recognising it as a common language in international settings. I agree with that limited proposal because a shared language can reduce practical barriers. However, the claim that no other languages are necessary overlooks how people learn, obtain public services and participate in their own communities.
+
+A shared language can make cooperation quicker. For example, an engineering team with members in several countries could use English to write a common safety manual and discuss revisions during meetings. Each participant would be able to work from the same version of the instructions. Similarly, universities that offer some courses in a language familiar to students from many backgrounds can widen access to specialist programmes. In such cases, recognising English as a working language would make sense if institutions also gave participants adequate language support.
+
+However, many interactions demand more than basic fluency. A patient describing a recurring pain may use expressions that are difficult to translate. If the consultation were conducted only in English, the patient might omit details that matter for diagnosis. Services such as healthcare and the courts therefore need staff or interpreters who can communicate in languages understood by the people using them. Schools also have a reason to teach children in a familiar language, especially when they are first developing literacy.
+
+Moreover, languages give people access to cultural knowledge. A community's oral histories and place names may contain information about past events or local landscapes that is hard to preserve through translation alone. Treating those languages as unnecessary could reduce opportunities for younger generations to learn them.
+
+In conclusion, English can serve as a shared working language where that arrangement makes communication easier. Its international use should coexist with investment in other languages, particularly where they support education, public services and the transmission of cultural knowledge.`},
+    {title:"Why a single official world language would be unfair", stance:"Strong disagreement", text:`The idea of making English the official world language appeals to those who want international communication to be simpler. English already enables many people to cooperate across national borders, and schools have good reasons to offer it as an additional language. Nevertheless, I disagree with granting it a single official global status and strongly reject the view that other languages are unnecessary.
+
+First, official status would give fluent English speakers an advantage in decisions that affect people everywhere. At an international meeting on flood prevention, for example, a representative may understand local farming practices and river conditions well but have difficulty describing them quickly in English. A fluent speaker with less relevant experience could sound more convincing. Institutions can reduce this imbalance by providing interpretation, accepting written evidence in several languages and giving participants time to read translated documents before debates.
+
+Second, several languages can be essential even in one country. After an earthquake, a local authority needs to communicate where people can find clean water or shelter. Messages in a language understood by only some residents would put others at risk, regardless of how useful that language might be at an international conference. Delivering information in the main languages spoken locally can improve access and help residents respond promptly. A similar principle applies to voting information and public health advice.
+
+Supporters of a single official language may argue that translation takes time and resources. This is a serious concern, especially when many organisations must cooperate. Yet organisations can choose a working language for routine coordination and reserve translation resources for decisions, instructions and services that affect a wider public. These arrangements can be adjusted to the people involved and the consequences of a misunderstanding.
+
+Overall, learning English can create opportunities, but international cooperation depends on making room for other languages. Flexible arrangements would make better use of English while giving people a fairer chance to contribute and understand decisions.`}
+  ]
+};
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const screen = $("#screen");
+const dialog = $("#dialog");
+const studentKey = PAPER + ":student";
+const teacherKey = PAPER + ":teacher";
+const memory = new Map();
+let view = "home";
+let teacherTab = "marks";
+let section = 0;
+let newAttempt = false;
+let search = "";
+let classFilter = "";
+let statusFilter = "";
+let analysisGroup = "";
+let teacherMessage = { text:"", tone:"" };
+let storageAvailable = true;
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function warnStorage() {
+  storageAvailable = false;
+  const notice = $("#storage-notice");
+  notice.textContent = "Browser storage is unavailable or full. Keep this tab open and download your submission or teacher backup before leaving.";
+  notice.hidden = false;
+}
+
+function read(key, fallback) {
+  if (memory.has(key)) return memory.get(key);
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    warnStorage();
+    return fallback;
+  }
+}
+
+function write(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    memory.delete(key);
+  } catch {
+    warnStorage();
+    memory.set(key, value);
+  }
+}
+
+function student() { return read(studentKey, null); }
+function roster() { return read(teacherKey, []); }
+
+function words(value) {
+  return (value.match(/[\p{L}\p{N}]+(?:[’'\-][\p{L}\p{N}]+)*/gu) || []).length;
+}
+
+function normalized(answer) { return answer.trim().toLowerCase(); }
+function scoreAnswers(answers) {
+  return KEY.map((accepted,i) => accepted.includes(normalized(answers[i] || "")));
+}
+function sectionScores(items) {
+  return [0,1,2,3].map(i => items.slice(i * 10, i * 10 + 10).filter(Boolean).length);
+}
+function automatic(attempt) { return scoreAnswers(attempt.answers).filter(Boolean).length; }
+function total(attempt) { return attempt.grade ? automatic(attempt) + attempt.grade.mark : null; }
+
+function displayNumber(value) {
+  return value === null ? "—" : new Intl.NumberFormat("en", {maximumFractionDigits:1}).format(value);
+}
+function markLabel(value, max) {
+  return value === null ? "—" : displayNumber(value) + " / " + max;
+}
+function formatTime(time) {
+  return new Intl.DateTimeFormat("en", {dateStyle:"medium",timeStyle:"short"}).format(time);
+}
+function attemptSummary(attempt) {
+  const count = attempt.answers.filter(answer => answer.trim()).length;
+  const essayWords = words(attempt.essay);
+  return { count, essayWords, completeEssay:Boolean(attempt.topic && essayWords >= MIN_WORDS) };
+}
+function currentClock(deadline) {
+  const seconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+  const show = n => String(n).padStart(2,"0");
+  return show(Math.floor(seconds / 3600)) + ":" + show(Math.floor(seconds / 60) % 60) + ":" + show(seconds % 60);
+}
+function download(name, body, type) {
+  const url = URL.createObjectURL(new Blob([body], {type}));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = name;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+function downloadSubmission(attempt) {
+  const safeId = attempt.studentId.replace(/[^A-Za-z0-9_-]/g, "-").slice(0,45) || "student";
+  download("EAP-" + safeId + "-" + attempt.id.slice(0,8) + ".json",
+    JSON.stringify({paper:PAPER, version:1, kind:"submission", attempt}, null, 2),
+    "application/json");
+}
+
+function navigate(next, scroll = true) {
+  view = next;
+  newAttempt = false;
+  render(scroll);
+}
+
+function render(scroll = false) {
+  $("#student-link").toggleAttribute("aria-current", view === "student");
+  $("#teacher-link").toggleAttribute("aria-current", view === "teacher");
+  for (const link of $$(".top-nav [aria-current]")) link.setAttribute("aria-current", "page");
+  if (view === "student") renderStudent();
+  else if (view === "teacher") renderTeacher();
+  else renderHome();
+  if (scroll) {
+    window.scrollTo(0,0);
+    const heading = $("h1", screen);
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({preventScroll:true});
+    }
+  }
+}
+
+function renderHome() {
+  const attempt = student();
+  screen.innerHTML = `
+    <section class="hero" aria-labelledby="home-title">
+      <div class="hero-copy">
+        <p class="eyebrow">English for Academic Purposes · Semester 2</p>
+        <h1 id="home-title">Writing practice paper</h1>
+        <p>Work through the five sections of the 2023–24 writing paper, or review and mark submissions from your class.</p>
+        <div class="hero-meta"><span>90 minutes</span><span>5 sections</span><span>100 marks</span></div>
+      </div>
+      <div class="illustration" aria-hidden="true">
+        <div class="sheet"></div><div class="sheet front"><b>Aa</b><i></i><i></i><i></i></div><div class="pen"></div>
+      </div>
+    </section>
+    <div class="role-grid">
+      <section class="card role-card" aria-labelledby="student-card-title">
+        <span class="tile-icon" aria-hidden="true">✎</span>
+        <h2 id="student-card-title">Student exam</h2>
+        <p class="muted">Complete the timed paper, write your essay and download a submission to share with your teacher.</p>
+        <button type="button" class="btn" id="student-entry">${attempt?.status === "active" ? "Resume exam" : attempt ? "View submission" : "Enter student exam"} <span aria-hidden="true">→</span></button>
+      </section>
+      <section class="card role-card" aria-labelledby="teacher-card-title">
+        <span class="tile-icon teacher" aria-hidden="true">▥</span>
+        <h2 id="teacher-card-title">Teacher dashboard</h2>
+        <p class="muted">Collect submissions, mark essays and see how your class performed by section and question.</p>
+        <button type="button" class="btn secondary" id="teacher-entry">Open teacher dashboard <span aria-hidden="true">→</span></button>
+      </section>
+    </div>
+    <p class="home-note muted small">Practice version. Anyone with the page link can open the teacher dashboard and view the answer key and model essays.</p>`;
+  $("#student-entry").onclick = () => navigate("student");
+  $("#teacher-entry").onclick = () => navigate("teacher");
+}
+
+function renderStudent() {
+  const attempt = student();
+  if (!newAttempt && attempt?.status === "active") {
+    if (Date.now() >= attempt.deadline) {
+      finalize(attempt, true);
+      return;
+    }
+    section = attempt.section;
+    renderExam(attempt);
+  } else if (!newAttempt && attempt?.status === "submitted") {
+    renderReceipt(attempt);
+  } else {
+    renderStart(attempt);
+  }
+}
+
+function renderStart(previous) {
+  screen.innerHTML = `
+  <div class="narrow">
+    <div class="page-head">
+      <div><p class="eyebrow">Student exam</p><h1>Before you begin</h1>
+      <p class="muted">Enter your details so your teacher can identify your submission.</p></div>
+    </div>
+    <section class="panel stack" aria-label="Exam entry">
+      <ul class="rubric">
+        <li>Answer all five sections. Spell every short answer correctly.</li>
+        <li>Choose one essay topic and write at least 250 words. Allow around 40 minutes for this task.</li>
+        <li>Work without dictionaries. The 90-minute timer starts when you begin and keeps running if you leave or reload the page.</li>
+      </ul>
+      <form id="exam-entry-form" class="stack">
+        <label class="field">NCUK ID / student ID
+          <input name="studentId" maxlength="80" required autocomplete="off">
+        </label>
+        <div class="form-grid">
+          <label class="field">Name <span class="sr-only">(optional)</span><input name="studentName" maxlength="100" autocomplete="name"></label>
+          <label class="field">Class <span class="sr-only">(optional)</span><input name="group" maxlength="70" placeholder="e.g. EAP 261" autocomplete="off"></label>
         </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        
-        <!-- Section 1 -->
-        <section class="bg-white rounded-lg shadow-md p-6 sm:p-8">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Section 1 [10 Marks]</h2>
-            <p class="text-gray-600 mb-6 font-medium">Choose ONE suitable word for each gap. Use ANY word which is appropriate. All spelling must be correct.</p>
-            
-            <div class="text-gray-800 leading-loose text-lg">
-                The field of consumer behaviour examines how consumers make choices, how they interact with products or services, and how they respond 
-                <span class="inline-block">1) <input type="text" id="q1" class="input-box" autocomplete="off"></span>. 
-                Being able to understand this is important 
-                <span class="inline-block">2) <input type="text" id="q2" class="input-box" autocomplete="off"></span> 
-                businesses. Firstly, understanding consumer behaviour helps us to work out what's popular in the market. We can unearth what the public prefers and also any emerging trends. This helps us keep our products or services in line 
-                <span class="inline-block">3) <input type="text" id="q3" class="input-box" autocomplete="off"></span> 
-                consumer demands. It also helps us create new, innovative products. What is more, 
-                <span class="inline-block">4) <input type="text" id="q4" class="input-box" autocomplete="off"></span> 
-                determining consumer preferences and patterns of use, we can create products 
-                <span class="inline-block">5) <input type="text" id="q5" class="input-box" autocomplete="off"></span> 
-                better cater to consumer needs. Finally, 
-                <span class="inline-block">6) <input type="text" id="q6" class="input-box" autocomplete="off"></span> 
-                helps us to promote products appropriately. We can use 
-                <span class="inline-block">7) <input type="text" id="q7" class="input-box" autocomplete="off"></span> 
-                knowledge we gain to create promotions and adverts that people like and we can place them strategically 
-                <span class="inline-block">8) <input type="text" id="q8" class="input-box" autocomplete="off"></span> 
-                people are most likely to see them. However, understanding consumer behaviour 
-                <span class="inline-block">9) <input type="text" id="q9" class="input-box" autocomplete="off"></span> 
-                not solely about acquiring new customers, it is also about retaining 
-                <span class="inline-block">10) <input type="text" id="q10" class="input-box" autocomplete="off"></span> 
-                we already have. Once we understand what makes customers happy, we are able to keep them coming back for more.
-            </div>
-            <div id="ans1" class="hidden mt-4 p-4 bg-gray-50 border rounded text-sm text-gray-700"></div>
-        </section>
-
-        <!-- Section 2 -->
-        <section class="bg-white rounded-lg shadow-md p-6 sm:p-8">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Section 2 [10 Marks]</h2>
-            <p class="text-gray-600 mb-4 font-medium">Choose the most suitable word from the word bank for each gap. Words can be used once only.</p>
-            
-            <div class="word-bank">
-                <span class="word-badge">limit</span> <span class="word-badge">substitutes</span> <span class="word-badge">achieves</span> 
-                <span class="word-badge">made</span> <span class="word-badge">changes</span> <span class="word-badge">exchange</span> 
-                <span class="word-badge">events</span> <span class="word-badge">anxiety</span> <span class="word-badge">accessible</span> 
-                <span class="word-badge">concerns</span> <span class="word-badge">basic</span> <span class="word-badge">worry</span> 
-                <span class="word-badge">experiences</span> <span class="word-badge">generated</span> <span class="word-badge">replace</span> 
-                <span class="word-badge">cares</span> <span class="word-badge">succeeds</span> <span class="word-badge">extravagant</span> 
-                <span class="word-badge">contain</span> <span class="word-badge">expensive</span>
-            </div>
-
-            <div class="text-gray-800 leading-loose text-lg">
-                The integration of Artificial Intelligence (AI) into education has 
-                <span class="inline-block">11) <input type="text" id="q11" class="input-box" autocomplete="off"></span> 
-                both advantages and problems. On the positive side, AI brings the promise of personalized learning 
-                <span class="inline-block">12) <input type="text" id="q12" class="input-box" autocomplete="off"></span> 
-                catering to individual student's needs. It 
-                <span class="inline-block">13) <input type="text" id="q13" class="input-box" autocomplete="off"></span> 
-                this by being able to adapt lessons and exercises based on each student's ability and learning speed. Furthermore, AI can make education more 
-                <span class="inline-block">14) <input type="text" id="q14" class="input-box" autocomplete="off"></span> 
-                for all students, but particularly for students with different learning needs, by offering tailored support and appropriate 
-                <span class="inline-block">15) <input type="text" id="q15" class="input-box" autocomplete="off"></span> 
-                to learning material. However, the introduction of AI also raises 
-                <span class="inline-block">16) <input type="text" id="q16" class="input-box" autocomplete="off"></span>. 
-                The digital divide is one issue, as not all students have equal access to AI tools. In addition to this, implementing AI in education can be prohibitively 
-                <span class="inline-block">17) <input type="text" id="q17" class="input-box" autocomplete="off"></span> 
-                for some institutions which may in turn lead to educational inequalities. There is also a 
-                <span class="inline-block">18) <input type="text" id="q18" class="input-box" autocomplete="off"></span> 
-                that if students rely too much on AI, it may 
-                <span class="inline-block">19) <input type="text" id="q19" class="input-box" autocomplete="off"></span> 
-                their ability to think critically and use problem-solving skills. Some people fear that AI might 
-                <span class="inline-block">20) <input type="text" id="q20" class="input-box" autocomplete="off"></span> 
-                educators, impacting on the overall quality of the learning experience.
-            </div>
-            <div id="ans2" class="hidden mt-4 p-4 bg-gray-50 border rounded text-sm text-gray-700"></div>
-        </section>
-
-        <!-- Section 3 -->
-        <section class="bg-white rounded-lg shadow-md p-6 sm:p-8">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Section 3 [10 Marks]</h2>
-            <p class="text-gray-600 mb-2 font-medium">In each line of the passage below, there is ONE error (either an incorrect word or a missing word).</p>
-            <ul class="list-disc pl-5 text-gray-600 text-sm mb-6">
-                <li>If a word is missing, write the missing word.</li>
-                <li>If a word is incorrect, write the correct word (ONE WORD ONLY).</li>
-            </ul>
-
-            <div class="bg-gray-50 p-6 rounded-lg font-mono text-base border border-gray-200">
-                <div class="line-container text-gray-500 italic">
-                    <span class="line-text">An ageing population occurs when a larger number people are growing</span>
-                    <span>Example A: <input type="text" class="input-box text-sm" value="of" disabled></span>
-                </div>
-                <div class="line-container text-gray-500 italic">
-                    <span class="line-text">older and living longer. This happens because there are few babies</span>
-                    <span>Example B: <input type="text" class="input-box text-sm" value="fewer" disabled></span>
-                </div>
-                
-                <div class="line-container">
-                    <span class="line-text">be born and improvements in healthcare are helping people enjoy a</span>
-                    <span>21) <input type="text" id="q21" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">longer life. The implications of an ageing population huge. Firstly, it</span>
-                    <span>22) <input type="text" id="q22" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">mean that a growing number of elderly people will require assistance with</span>
-                    <span>23) <input type="text" id="q23" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">everyday activities. This places an increasingly high demand our already</span>
-                    <span>24) <input type="text" id="q24" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">strained support systems, highlighting that improvements need to made in</span>
-                    <span>25) <input type="text" id="q25" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">order to adequately meet these increasing needs. Secondly, a ageing population</span>
-                    <span>26) <input type="text" id="q26" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">can impacting on our economy. With fewer young people entering the</span>
-                    <span>27) <input type="text" id="q27" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">workforce, there may be labour shortages, what will affect economic</span>
-                    <span>28) <input type="text" id="q28" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">growth. To address all of challenges, careful planning is essential. Additionally,</span>
-                    <span>29) <input type="text" id="q29" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="line-container">
-                    <span class="line-text">promoting active and healthy ageing is important both individual well-being</span>
-                    <span>30) <input type="text" id="q30" class="input-box text-sm" autocomplete="off"></span>
-                </div>
-                <div class="text-gray-700 mt-2">and the sustainability of our societies.</div>
-            </div>
-            <div id="ans3" class="hidden mt-4 p-4 bg-gray-50 border rounded text-sm text-gray-700"></div>
-        </section>
-
-        <!-- Section 4 -->
-        <section class="bg-white rounded-lg shadow-md p-6 sm:p-8">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Section 4 [10 Marks]</h2>
-            <p class="text-gray-600 mb-6 font-medium">Use the word in brackets to form another word which fits in the space in the sentence. All spelling must be correct.</p>
-            
-            <div class="space-y-4 text-lg text-gray-800">
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">31.</span>
-                    <span class="flex-grow">While working on the project the team <input type="text" id="q31" class="input-box" autocomplete="off"> some unexpected problems.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(encounter)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">32.</span>
-                    <span class="flex-grow">Advances in technology are <input type="text" id="q32" class="input-box" autocomplete="off"> the way we communicate, connecting people across the globe in an instant.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(revolution)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">33.</span>
-                    <span class="flex-grow">The instructions were clear and <input type="text" id="q33" class="input-box" autocomplete="off"> so there should be no confusion about what needed to be done.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(ambiguous)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">34.</span>
-                    <span class="flex-grow">He proposed some new creative ideas at work but they were met with <input type="text" id="q34" class="input-box" autocomplete="off"> from other colleagues.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(reject)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">35.</span>
-                    <span class="flex-grow">The doctor arranged a <input type="text" id="q35" class="input-box" autocomplete="off"> with the patient to talk through treatment options.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(consult)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">36.</span>
-                    <span class="flex-grow">The back injury she sustained after the car accident left her <input type="text" id="q36" class="input-box" autocomplete="off"> of performing her usual duties at work.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(capable)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">37.</span>
-                    <span class="flex-grow">Workers reacted <input type="text" id="q37" class="input-box" autocomplete="off"> to the news that their pensions were going to be cut.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(negative)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">38.</span>
-                    <span class="flex-grow">Your <input type="text" id="q38" class="input-box" autocomplete="off"> hand is the one you naturally perform most activities with.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(dominate)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">39.</span>
-                    <span class="flex-grow">A slight <input type="text" id="q39" class="input-box" autocomplete="off"> was made to the recipe so both meat eaters and vegetarians could enjoy the food.</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(adjust)</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-8 font-bold">40.</span>
-                    <span class="flex-grow">His fear of heights was <input type="text" id="q40" class="input-box" autocomplete="off"> but most phobias are!</span>
-                    <span class="text-blue-700 font-mono font-bold w-32 text-right">(rational)</span>
-                </div>
-            </div>
-            <div id="ans4" class="hidden mt-4 p-4 bg-gray-50 border rounded text-sm text-gray-700"></div>
-        </section>
-
-        <!-- Submit Button -->
-        <div class="text-center">
-            <button id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg text-xl transition-all transform hover:scale-105">
-                Check Answers
-            </button>
+        <p class="small muted">Name and class are optional. Download your submission after the exam and send it through your teacher’s collection channel.</p>
+        ${previous ? '<p class="notice warn small">Starting again replaces the submission saved in this browser. Download the earlier submission first if you need it.</p>' : ""}
+        <div class="actions">
+          <button type="submit" class="btn">Start 90-minute exam</button>
+          <button type="button" class="btn ghost" id="cancel-start">${previous ? "Back to submission" : "Back to home"}</button>
         </div>
+      </form>
+    </section>
+  </div>`;
+  $("#cancel-start").onclick = () => navigate(previous ? "student" : "home");
+  const form = $("#exam-entry-form");
+  form.studentId.oninput = () => form.studentId.setCustomValidity("");
+  form.onsubmit = event => {
+    event.preventDefault();
+    const active = student();
+    if (active?.status === "active") {
+      navigate("student");
+      return;
+    }
+    const formData = new FormData(form);
+    const studentId = String(formData.get("studentId")).trim();
+    if (!studentId) {
+      form.studentId.setCustomValidity("Enter your student ID.");
+      form.studentId.reportValidity();
+      return;
+    }
+    const start = Date.now();
+    const id = globalThis.crypto?.randomUUID?.() || Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2,"0")).join("");
+    write(studentKey, {
+      id, studentId, studentName:String(formData.get("studentName")).trim(), group:String(formData.get("group")).trim(), 
+      status:"active", startsAt:start, deadline:start + LIMIT, section:0, answers:Array(40).fill(""), topic:"", essay:""
+    });
+    navigate("student");
+  };
+}
 
-        <!-- Section 5 -->
-        <section class="bg-white rounded-lg shadow-md p-6 sm:p-8 mt-12">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Section 5 - Writing Task [60 Marks]</h2>
-            <p class="text-gray-600 mb-6">Choose ONE of the topics below. Write at least 250 words.</p>
-            
-            <div class="space-y-8">
-                <!-- Topic A -->
-                <div class="border rounded-lg p-6 bg-slate-50 border-slate-200">
-                    <h3 class="text-lg font-bold text-slate-800 mb-3">Topic A</h3>
-                    <p class="text-slate-700 text-lg mb-4 italic">"AI (artificial intelligence) technology is slowly taking over more and more jobs that could be done by humans. Governments should make laws now to protect jobs from this new technology. To what extent do you agree?"</p>
-                    <button onclick="toggleEssay('essayA')" class="text-blue-600 font-medium hover:text-blue-800 underline">Show / Hide Example Essay</button>
-                    
-                    <div id="essayA" class="hidden mt-4 pt-4 border-t border-slate-300">
-                        <div class="prose max-w-none text-gray-800">
-                            <p class="mb-4">The rapid advancement of artificial intelligence (AI) has sparked widespread concern regarding its impact on the global workforce. As AI systems become increasingly capable of performing complex tasks previously reserved for humans, some argue that governments must enact strict legislation to protect existing jobs. While I agree that governments have a crucial role to play in managing this economic transition, I strongly disagree with the notion of implementing protectionist laws aimed at halting technological progress.</p>
-                            <p class="mb-4">On the one hand, the threat AI poses to employment is undeniable. Automation is no longer restricted to manual labour; it now encompasses cognitive tasks in sectors such as finance, healthcare, and customer service. Without intervention, this disruption could lead to significant unemployment and widen economic inequality. Therefore, government action is necessary. However, this action should take the form of robust social safety nets rather than bans on technology. By investing heavily in education, vocational retraining, and exploring concepts like universal basic income, governments can equip displaced workers with the skills needed to thrive in an evolving, tech-centric economy.</p>
-                            <p class="mb-4">Conversely, enacting laws to explicitly protect jobs from AI would be counterproductive. Historically, resisting technological innovation stifles economic growth and reduces a nation's global competitiveness. If a government bans the use of AI in certain industries to save jobs, companies within that nation will inevitably fall behind international competitors who leverage AI for greater efficiency and innovation. Furthermore, while AI displaces certain roles, it simultaneously creates new industries and occupations that currently do not exist.</p>
-                            <p>In conclusion, while the displacement of jobs by AI is a valid concern requiring immediate attention, protective legislation is the wrong approach. Governments should instead focus on proactive adaptation, prioritizing the education and financial security of their citizens to ensure a smooth transition into an AI-integrated future.</p>
-                        </div>
-                    </div>
-                </div>
+function gap(number, attempt, bank = false) {
+  const answer = attempt.answers[number - 1];
+  const control = bank
+    ? `<select id="q${number}" aria-label="Question ${number}" data-answer="${number}"><option value="">Choose…</option>${BANK.map(word => `<option${word === answer ? " selected" : ""}>${word}</option>`).join("")}</select>`
+    : `<input id="q${number}" type="text" aria-label="Question ${number}" data-answer="${number}" value="${escapeHTML(answer)}" maxlength="80" autocomplete="off" autocapitalize="off" spellcheck="false">`;
+  return `<span class="gap"><span class="qnum" aria-hidden="true">${number}</span>${control}</span>`;
+}
 
-                <!-- Topic B -->
-                <div class="border rounded-lg p-6 bg-slate-50 border-slate-200">
-                    <h3 class="text-lg font-bold text-slate-800 mb-3">Topic B</h3>
-                    <p class="text-slate-700 text-lg mb-4 italic">"English should be the official world language. No other languages are necessary. To what extent do you agree with this statement?"</p>
-                    <button onclick="toggleEssay('essayB')" class="text-blue-600 font-medium hover:text-blue-800 underline">Show / Hide Example Essay</button>
-                    
-                    <div id="essayB" class="hidden mt-4 pt-4 border-t border-slate-300">
-                        <div class="prose max-w-none text-gray-800">
-                            <p class="mb-4">In our highly globalized world, English has undeniably established itself as the dominant lingua franca, facilitating international trade, diplomacy, and scientific research. Because of its utility, some propose that English should be adopted as the sole official world language, rendering all other languages obsolete. I completely disagree with this assertion, as eradicating linguistic diversity would result in a catastrophic loss of cultural heritage and cognitive diversity.</p>
-                            <p class="mb-4">Admittedly, the widespread use of English offers significant practical advantages. A shared global language breaks down communication barriers, streamlining international business operations and allowing for the seamless exchange of academic and scientific knowledge. It enables people from vastly different geographical backgrounds to collaborate efficiently. However, acknowledging English as a useful common tool is entirely different from suggesting it should be the only language in existence.</p>
-                            <p class="mb-4">The primary flaw in the argument for a single world language is its disregard for the profound connection between language and culture. A language is not merely a mechanical tool for transferring information; it is a repository of a community's history, values, idioms, and unique worldview. When a language dies, the cultural identity and ancestral knowledge embedded within it are lost forever. Furthermore, linguistic diversity benefits human cognition. Research has consistently shown that bilingualism and multilingualism enhance brain plasticity, improve problem-solving skills, and foster a greater capacity for empathy by allowing individuals to view the world through multiple linguistic frameworks.</p>
-                            <p>In conclusion, while English serves an incredibly vital role as a global medium of communication, the suggestion that no other languages are necessary is fundamentally flawed. We should actively celebrate and preserve our linguistic diversity, promoting a world where individuals are multilingual, preserving their cultural roots while simultaneously participating in the global community.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+function withGaps(text, attempt, bank = false) {
+  return escapeHTML(text).replace(/\{(\d+)\}/g, (_, number) => gap(Number(number), attempt, bank));
+}
+
+function renderSection(attempt) {
+  if (section === 0) return `
+    <p>Choose <strong>one suitable word</strong> for each gap. Use any word which is appropriate. All spelling must be correct.</p>
+    <p class="example small">Example · I like apples <strong>and</strong> oranges.</p>
+    <div class="passage">${OPEN_PASSAGE.map(text => "<p>" + withGaps(text, attempt) + "</p>").join("")}</div>`;
+  if (section === 1) return `
+    <p>Choose the most suitable word from the word bank for each gap. Each word may be used once.</p>
+    <div class="word-bank" aria-label="Word bank">${BANK.map(word => `<span data-word="${word}">${word}</span>`).join("")}</div>
+    <div class="passage">${BANK_PASSAGE.map(text => "<p>" + withGaps(text, attempt, true) + "</p>").join("")}</div>`;
+  if (section === 2) return `
+    <p>Each numbered line contains one incorrect or missing word. Enter only the missing word or its replacement. All spelling must be correct.</p>
+    <div class="example small">
+      <p>Example A · An ageing population occurs when a larger number / people are growing <strong>(of)</strong></p>
+      <p>Example B · older and living longer. This happens because there are <u>few</u> babies <strong>(fewer)</strong></p>
+    </div>
+    <ol class="question-list" start="21">${CORRECTION.map((text, i) => `<li><span class="qnum" aria-hidden="true">${i+21}</span><span>${escapeHTML(text)}</span>${gap(i+21, attempt)}</li>`).join("")}</ol>
+    <p class="small">and the sustainability of our societies.</p>`;
+  if (section === 3) return `
+    <p>Use the given word to form a new word that fits the gap. All spelling must be correct.</p>
+    <p class="example small">Example · The introduction to the essay was good but the <strong>conclusion</strong> needed work. <span class="pill">conclude</span></p>
+    <ol class="question-list" start="31">${FORMATION.map(([text, root], i) => `<li><span class="qnum" aria-hidden="true">${i+31}</span><span>${withGaps(text, attempt)}</span><span class="pill root">${root}</span></li>`).join("")}</ol>`;
+  return `
+    <p>Spend approximately 40 minutes on this task. Write at least <strong>250 words</strong>. Use your own ideas, knowledge and experience to support your argument with examples and relevant evidence.</p>
+    <fieldset class="stack-tight"><legend>Choose one topic</legend>
+      ${Object.entries(TOPICS).map(([letter, topic]) => `<label class="topic-card"><input type="radio" name="topic" value="${letter}"${attempt.topic === letter ? " checked" : ""}><span><strong>Topic ${letter} · ${topic.name}</strong>${escapeHTML(topic.prompt)}</span></label>`).join("")}
+    </fieldset>
+    <label class="field">Your essay
+      <textarea id="essay" class="essay-box" maxlength="30000" spellcheck="false" autocorrect="off" aria-describedby="word-count">${escapeHTML(attempt.essay).replace(/^\n/, "&#10;")}</textarea>
+    </label>
+    <p class="small muted" id="word-count"></p>`;
+}
+
+function renderExam(attempt) {
+  const current = SECTIONS[section];
+  screen.innerHTML = `
+    <div class="page-head">
+      <div><p class="eyebrow">Student exam</p><h1>Writing examination</h1>
+      <p class="muted">Student ID · ${escapeHTML(attempt.studentId)}</p></div>
+    </div>
+    <div class="test-layout">
+      <aside class="card exam-side" aria-label="Exam progress">
+        <div class="clock"><span class="small">Time left</span><strong id="clock" role="timer" aria-live="off">${currentClock(attempt.deadline)}</strong></div>
+        <nav class="section-nav" aria-label="Exam sections">
+          ${SECTIONS.map((item, i) => `<button type="button" data-section="${i}" aria-label="Section ${i+1}, ${item.name}"${i === section ? ' aria-current="step"' : ""}><span class="nav-num">${i+1}</span><span class="nav-name">${item.name}</span><small data-progress="${i}"></small></button>`).join("")}
+        </nav>
+        <button type="button" class="btn secondary" id="review-exam">Review &amp; submit</button>
+        <p class="small muted" id="save-status"></p>
+      </aside>
+      <section class="panel stack" aria-labelledby="section-title">
+        <div class="section-top">
+          <div><p class="eyebrow">Section ${section + 1} · ${current.detail}</p><h2 id="section-title" tabindex="-1">${current.name}</h2></div>
+          <span class="pill">${current.marks} marks</span>
+        </div>
+        ${renderSection(attempt)}
+        <div class="exam-actions">
+          <button type="button" class="btn secondary" id="previous-section"${section === 0 ? " disabled" : ""}>← Previous section</button>
+          <button type="button" class="btn" id="next-section">${section === 4 ? "Review &amp; submit" : "Next section →"}</button>
+        </div>
+      </section>
+    </div>`;
+  const update = (apply, repaint = false) => {
+    const latest = student();
+    if (latest?.id !== attempt.id || latest.status !== "active") {
+      render();
+      return;
+    }
+    if (latest.deadline <= Date.now()) {
+      finalize(latest, true);
+      return;
+    }
+    apply(latest);
+    write(studentKey, latest);
+    if (repaint) {
+      renderStudent();
+      $("#section-title")?.scrollIntoView({block:"start"});
+      $("#section-title")?.focus({preventScroll:true});
+    } else refreshProgress(latest);
+  };
+  const go = index => update(latest => { latest.section = index; }, true);
+  for (const link of $$("[data-section]", screen)) link.onclick = () => go(Number(link.dataset.section));
+  $("#previous-section").onclick = () => go(section - 1);
+  $("#next-section").onclick = () => section === 4 ? reviewExam() : go(section + 1);
+  $("#review-exam").onclick = reviewExam;
+  for (const field of $$("[data-answer]", screen)) {
+    const save = () => update(latest => { latest.answers[Number(field.dataset.answer)-1] = field.value; });
+    field.addEventListener(field.tagName === "SELECT" ? "change" : "input", save);
+  }
+  for (const topic of $$("input[name=topic]", screen)) topic.onchange = () => update(latest => { latest.topic = topic.value; });
+  if ($("#essay")) $("#essay").oninput = event => update(latest => { latest.essay = event.target.value; });
+  refreshProgress(attempt);
+}
+
+function refreshProgress(attempt) {
+  const {essayWords, completeEssay} = attemptSummary(attempt);
+  for (let i = 0; i < 4; i++) {
+    const count = attempt.answers.slice(i * 10, (i + 1) * 10).filter(value => value.trim()).length;
+    $(`[data-progress="${i}"]`).textContent = count + "/10";
+    $(`[data-section="${i}"]`).setAttribute("aria-label", `Section ${i+1}, ${SECTIONS[i].name}, ${count} of 10 answered`);
+  }
+  $('[data-progress="4"]').textContent = completeEssay ? "Ready" : essayWords + " words";
+  $('[data-section="4"]').setAttribute("aria-label", "Section 5, Essay writing, " + essayWords + " words");
+  if ($("#word-count")) $("#word-count").textContent = essayWords + " / 250 words minimum";
+  const chosen = new Set(attempt.answers.slice(10,20).filter(Boolean));
+  for (const tag of $$("[data-word]", screen)) tag.classList.toggle("used", chosen.has(tag.dataset.word));
+  for (const input of $$("select[data-answer]", screen)) {
+    for (const option of input.options) option.disabled = chosen.has(option.value) && option.value !== input.value;
+  }
+  $("#save-status").textContent = storageAvailable ? "Draft saved in this browser" : "Draft held in this tab";
+  $(".clock").classList.toggle("urgent", attempt.deadline - Date.now() <= 5 * 60 * 1000);
+}
+
+function showDialog(content, small = false) {
+  if (dialog.open) dialog.close();
+  dialog.classList.toggle("small-dialog", small);
+  dialog.innerHTML = content;
+  dialog.showModal();
+  for (const button of $$("[data-close]", dialog)) button.onclick = () => dialog.close();
+}
+
+function reviewExam() {
+  const attempt = student();
+  if (attempt?.status !== "active") return;
+  const {count, essayWords, completeEssay} = attemptSummary(attempt);
+  const warnings = [];
+  if (count < 40) warnings.push((40 - count) + " short-answer question(s) are blank");
+  if (!attempt.topic) warnings.push("no essay topic is selected");
+  if (essayWords < MIN_WORDS) warnings.push("the essay is below 250 words");
+  showDialog(`
+    <div class="dialog-body stack">
+      <h2 id="dialog-title">Review your submission</h2>
+      <p>${count} of 40 short answers entered. ${attempt.topic ? "Topic " + attempt.topic + " selected." : ""} Essay length is ${essayWords} words.</p>
+      ${count < 40 || !completeEssay ? `<p class="notice warn small">Incomplete work · ${warnings.join(", ")}.</p>` : ""}
+      <p class="small muted">Submitting locks this attempt. You can then download it to share with your teacher.</p>
+      <div class="actions"><button class="btn secondary" type="button" data-close autofocus>Keep working</button><button class="btn" type="button" id="submit-exam">Submit exam</button></div>
+    </div>`, true);
+  $("#submit-exam").onclick = () => {
+    const latest = student();
+    if (latest?.id === attempt.id && latest.status === "active") finalize(latest, Date.now() >= latest.deadline);
+    else { dialog.close(); render(); }
+  };
+}
+
+function finalize(attempt, timedOut) {
+  write(studentKey, {
+    id:attempt.id, studentId:attempt.studentId, studentName:attempt.studentName, group:attempt.group,
+    startsAt:attempt.startsAt, submittedAt:timedOut ? attempt.deadline : Date.now(), status:"submitted", timedOut,
+    answers:attempt.answers, topic:attempt.topic, essay:attempt.essay
+  });
+  if (view === "student" && dialog.open) dialog.close();
+  if (view !== "teacher") render(true);
+}
+
+function renderReceipt(attempt) {
+  const {count, essayWords} = attemptSummary(attempt);
+  screen.innerHTML = `
+    <section class="narrow panel stack" aria-labelledby="receipt-title">
+      <span class="completion-mark" aria-hidden="true">✓</span>
+      <div class="stack-tight">
+        <p class="eyebrow">Student exam</p><h1 id="receipt-title">Exam finished</h1>
+        <p class="muted">${attempt.timedOut ? "Time expired. Your answers were saved as a submission." : "Your answers have been saved as a submission."}</p>
+      </div>
+      <p><strong>${escapeHTML(attempt.studentId)}</strong> · ${formatTime(attempt.submittedAt)}<br>
+      <span class="small muted">${count} of 40 short answers entered · ${attempt.topic ? "Topic " + attempt.topic : "No topic selected"} · ${essayWords} essay words</span></p>
+      <p class="notice small">Download your submission file and send it to your teacher. The file includes your answers and essay.</p>
+      <div class="actions">
+        <button class="btn" id="download-submission" type="button">Download submission (.json)</button>
+        <button class="btn ghost" id="start-again" type="button">Start another attempt</button>
+      </div>
+    </section>`;
+  $("#download-submission").onclick = () => downloadSubmission(attempt);
+  $("#start-again").onclick = () => { newAttempt = true; render(true); };
+}
+
+function renderTeacher() {
+  const attempts = roster();
+  if (classFilter && !attempts.some(item => groupMatches(item, classFilter))) classFilter = "";
+  if (analysisGroup && !attempts.some(item => groupMatches(item, analysisGroup))) analysisGroup = "";
+  const tabs = {marks:"Collected marks", analysis:"Performance analysis", reference:"Answer key & essays"};
+  screen.innerHTML = `
+    <div class="page-head">
+      <div><p class="eyebrow">Teacher dashboard</p><h1>${tabs[teacherTab]}</h1>
+      <p class="muted">${{
+        marks:"Import student submissions, review responses and enter Section 5 marks.",
+        analysis:"Review section scores, question accuracy and essay results across your class.",
+        reference:"Use the supplied key for Sections 1–4 and compare two model essays for each topic."
+      }[teacherTab]}</p></div>
+      ${teacherTab === "marks" ? `<div class="actions">
+        <input id="import-files" type="file" accept=".json,application/json" multiple hidden>
+        <button type="button" class="btn" id="import-button">↑ Import JSON files</button>
+      </div>` : ""}
+    </div>
+    <nav class="tabs" aria-label="Teacher views">${Object.entries(tabs).map(([key,label]) => `<button type="button" data-tab="${key}"${key === teacherTab ? ' aria-current="page"' : ""}>${escapeHTML(label)}</button>`).join("")}</nav>
+    <p id="teacher-notice" class="notice small" role="status"></p>
+    <div id="teacher-content">${teacherTab === "marks" ? marksContent(attempts) : teacherTab === "analysis" ? analysisContent(attempts) : referenceContent()}</div>`;
+  for (const button of $$("[data-tab]", screen)) button.onclick = () => {
+    teacherTab = button.dataset.tab;
+    render(true);
+  };
+  refreshTeacherNotice();
+  if (teacherTab === "marks") {
+    $("#import-button").onclick = () => $("#import-files").click();
+    $("#import-files").onchange = event => importFiles([...event.target.files]);
+    if (!attempts.length) return;
+    $("#roster-search").oninput = event => { search = event.target.value; refreshRows(); };
+    $("#class-filter").onchange = event => { classFilter = event.target.value; refreshRows(); };
+    $("#status-filter").onchange = event => { statusFilter = event.target.value; refreshRows(); };
+    $("#export-csv").onclick = exportCSV;
+    $("#export-backup").onclick = () => download("EAP-teacher-backup.json",
+      JSON.stringify({paper:PAPER, version:1, kind:"teacher-backup", attempts:roster()}, null, 2), "application/json");
+    refreshRows();
+  }
+  if (teacherTab === "analysis" && attempts.length) $("#analysis-class").onchange = event => {
+    analysisGroup = event.target.value;
+    renderTeacher();
+    $("#analysis-class").focus();
+  };
+}
+
+function refreshTeacherNotice() {
+  const notice = $("#teacher-notice");
+  if (!notice) return;
+  notice.className = "notice small " + teacherMessage.tone;
+  notice.textContent = teacherMessage.text;
+  notice.style.marginBottom = teacherMessage.text ? "15px" : "0";
+}
+
+function empty(title, description) {
+  return `<section class="empty"><h2>${title}</h2><p class="muted">${description}</p></section>`;
+}
+
+function stat(label, value, detail) {
+  return `<div class="stat"><span class="small muted">${label}</span><strong>${value}</strong><span class="small muted">${detail}</span></div>`;
+}
+
+function classOptions(attempts, selected) {
+  const groups = [...new Set(attempts.map(item => item.group))].sort((a,b) => a.localeCompare(b));
+  return '<option value="">All classes</option>' + groups.map(group => {
+    const value = "class:" + group;
+    return `<option value="${escapeHTML(value)}"${value === selected ? " selected" : ""}>${escapeHTML(group || "Class unspecified")}</option>`;
+  }).join("");
+}
+
+function groupMatches(attempt, filter) {
+  return !filter || "class:" + attempt.group === filter;
+}
+
+function marksContent(attempts) {
+  if (!attempts.length) return empty("No submissions yet",
+    "Ask students to share their downloaded JSON files. You can import several files at once or restore a teacher backup.");
+  const graded = attempts.filter(item => item.grade).length;
+  const pending = attempts.length - graded;
+  return `<div class="stack">
+    <div class="stats">
+      ${stat("Collected", attempts.length, "Imported attempts")}
+      ${stat("Essay marked", graded, "Final mark available")}
+      ${stat("Awaiting marks", pending, "Section 5 pending")}
+      ${stat("Student IDs", new Set(attempts.map(item => item.studentId)).size, "Unique IDs")}
+    </div>
+    <section class="panel stack" aria-labelledby="roster-title">
+      <div class="page-head" style="margin-bottom:0"><h2 id="roster-title">Submissions</h2>
+        <div class="actions"><button type="button" class="btn secondary" id="export-csv">Export marks CSV</button><button type="button" class="btn secondary" id="export-backup">Download backup</button></div>
+      </div>
+      <div class="toolbar">
+        <input id="roster-search" type="search" aria-label="Search by student name or ID" placeholder="Search ID or name" value="${escapeHTML(search)}">
+        <select id="class-filter" aria-label="Filter by class">${classOptions(attempts, classFilter)}</select>
+        <select id="status-filter" aria-label="Filter by marking status">
+          <option value="">All marking statuses</option>
+          <option value="pending"${statusFilter === "pending" ? " selected" : ""}>Awaiting marks</option>
+          <option value="graded"${statusFilter === "graded" ? " selected" : ""}>Essay marked</option>
+        </select>
+      </div>
+      <div id="roster-rows"></div>
+      <p class="small muted">Marks are stored in this browser. The CSV exports the current selection. A JSON backup saves all responses and marks for restoration.</p>
+    </section>
+  </div>`;
+}
+
+function filteredRoster() {
+  const term = normalized(search);
+  return roster().filter(item => groupMatches(item, classFilter) &&
+    (!statusFilter || statusFilter === (item.grade ? "graded" : "pending")) &&
+    (!term || [item.studentId, item.studentName].some(value => normalized(value).includes(term))))
+    .sort((a,b) => b.submittedAt - a.submittedAt);
+}
+
+function refreshRows() {
+  const attempts = filteredRoster();
+  $("#roster-rows").innerHTML = attempts.length ? `
+    <div class="table-wrap"><table>
+      <caption class="sr-only">Collected student marks</caption>
+      <thead><tr><th scope="col">Student</th><th scope="col">Class</th><th scope="col">Sections 1–4</th><th scope="col">Essay</th><th scope="col">Total</th><th scope="col">Action</th></tr></thead>
+      <tbody>${attempts.map(item => `<tr>
+        <th scope="row"><strong>${escapeHTML(item.studentId)}</strong><br><span class="small muted">${escapeHTML(item.studentName) || formatTime(item.submittedAt)}</span></th>
+        <td>${escapeHTML(item.group) || "—"}</td>
+        <td>${markLabel(automatic(item),40)}</td>
+        <td>${item.grade ? markLabel(item.grade.mark,60) : '<span class="pill pending">Pending</span>'}</td>
+        <td>${markLabel(total(item),100)}</td>
+        <td><button type="button" data-attempt="${item.id}" class="btn secondary" aria-label="${item.grade ? "Review marks" : "Mark essay"} for ${escapeHTML(item.studentId)}">${item.grade ? "Review" : "Mark essay"}</button></td>
+      </tr>`).join("")}</tbody>
+    </table></div>` : '<p class="notice small">No submissions match the current filters.</p>';
+  $("#export-csv").disabled = !attempts.length;
+  for (const button of $$("[data-attempt]", screen)) button.onclick = () => markAttempt(button.dataset.attempt);
+}
+
+function readAttempt(raw, allowGrade) {
+  const validText = (x, max) => typeof x === "string" && x.length <= max;
+  const validTime = x => Number.isSafeInteger(x) && x >= 0 && x <= 8640000000000000;
+  if (!raw || typeof raw !== "object" || typeof raw.id !== "string" || !/^[0-9a-f]{32}$|^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(raw.id) ||
+      raw.status !== "submitted" || !validText(raw.studentId,80) || !raw.studentId.trim() || !validText(raw.studentName,100) || !validText(raw.group,70) ||
+      !validTime(raw.startsAt) || !validTime(raw.submittedAt) || raw.submittedAt < raw.startsAt || typeof raw.timedOut !== "boolean" ||
+      !Array.isArray(raw.answers) || raw.answers.length !== 40 || !raw.answers.every(answer => validText(answer,80)) ||
+      !["","A","B"].includes(raw.topic) || !validText(raw.essay,30000)) return null;
+  const item = {
+    id:raw.id.toLowerCase(), studentId:raw.studentId.trim(), studentName:raw.studentName.trim(), group:raw.group.trim(),
+    status:"submitted", startsAt:raw.startsAt, submittedAt:raw.submittedAt, timedOut:raw.timedOut,
+    answers:raw.answers, topic:raw.topic, essay:raw.essay
+  };
+  if (allowGrade && raw.grade != null) {
+    const {mark, feedback, markedAt} = raw.grade;
+    if (!Number.isFinite(mark) || mark < 0 || mark > 60 || Math.abs(mark * 10 - Math.round(mark * 10)) > 1e-8 ||
+        !validText(feedback,3000) || !validTime(markedAt)) return null;
+    item.grade = {mark, feedback, markedAt};
+  }
+  return item;
+}
+
+let importing = false;
+async function importFiles(files) {
+  if (importing || !files.length) return;
+  importing = true;
+  $("#import-button").disabled = true;
+  teacherMessage = {text:"Reading " + files.length + " file(s)…", tone:""};
+  refreshTeacherNotice();
+  const parsed = [];
+  const errors = [];
+  let invalid = 0;
+  for (const file of files) {
+    try {
+      if (file.size > 40 * 1024 * 1024) throw Error("File exceeds 40 MB");
+      const data = JSON.parse((await file.text()).replace(/^\uFEFF/, ""));
+      if (data.paper !== PAPER || data.version !== 1) throw Error("Unrecognised paper or file version");
+      const backup = data.kind === "teacher-backup";
+      const records = backup ? data.attempts : data.kind === "submission" ? [data.attempt] : null;
+      if (!Array.isArray(records)) throw Error("Expected a submission or teacher backup");
+      for (const raw of records) {
+        const attempt = readAttempt(raw, backup);
+        if (attempt) parsed.push(attempt);
+        else invalid++;
+      }
+    } catch (error) {
+      errors.push(file.name + " (" + (error instanceof SyntaxError ? "invalid JSON" : error.message) + ")");
+    }
+  }
+  const existing = new Map(roster().map(item => [item.id, item]));
+  let added = 0;
+  let duplicate = 0;
+  for (const attempt of parsed) {
+    if (existing.has(attempt.id)) {
+      duplicate++;
+      continue;
+    }
+    existing.set(attempt.id, attempt);
+    added++;
+  }
+  if (added) write(teacherKey, [...existing.values()]);
+  const main = `Imported ${added} attempt(s). ${duplicate} duplicate(s) skipped.`;
+  const detail = [
+    invalid ? `${invalid} invalid submission record(s) skipped.` : "",
+    errors.length ? `Could not read ${errors.slice(0,3).join(", ")}${errors.length > 3 ? " and " + (errors.length - 3) + " more file(s)" : ""}.` : ""
+  ].filter(Boolean).join(" ");
+  teacherMessage = {text:[main, detail].filter(Boolean).join(" "), tone:detail ? "warn" : "ok"};
+  importing = false;
+  if (view === "teacher") renderTeacher();
+}
+
+function csvText(value) {
+  let text = String(value ?? "");
+  if (typeof value === "string" && /^\s*[=+@\-]|^[\t\r\n]/.test(text)) text = "'" + text;
+  return '"' + text.replaceAll('"','""') + '"';
+}
+
+function exportCSV() {
+  const columns = ["Attempt ID","Student ID","Name","Class","Submitted UTC","Section 1 /10","Section 2 /10","Section 3 /10","Section 4 /10",
+    "Sections 1–4 /40","Essay topic","Essay words","Section 5 /60","Total /100","Marking status","Essay feedback"];
+  const rows = filteredRoster().map(item => [
+    item.id, item.studentId, item.studentName, item.group, new Date(item.submittedAt).toISOString(),
+    ...sectionScores(scoreAnswers(item.answers)), automatic(item), item.topic, words(item.essay), item.grade?.mark, total(item),
+    item.grade ? "Marked" : "Awaiting essay mark", item.grade?.feedback
+  ]);
+  download("EAP-collected-marks.csv", "\uFEFF" + [columns,...rows].map(row => row.map(csvText).join(",")).join("\r\n"), "text/csv;charset=utf-8");
+}
+
+function markAttempt(id) {
+  const item = roster().find(attempt => attempt.id === id);
+  if (!item) return;
+  const marks = scoreAnswers(item.answers);
+  const subtotal = marks.filter(Boolean).length;
+  const essayWords = words(item.essay);
+  showDialog(`
+    <div class="dialog-body stack">
+      <div class="dialog-head"><div class="stack-tight">
+        <p class="eyebrow">Student submission</p><h2 id="dialog-title">${escapeHTML(item.studentId)}${item.studentName ? " · " + escapeHTML(item.studentName) : ""}</h2>
+        <p class="muted small">${formatTime(item.submittedAt)}${item.group ? " · " + escapeHTML(item.group) : ""}${item.timedOut ? " · Time expired" : ""}</p>
+      </div><button class="btn ghost" type="button" data-close aria-label="Close submission">Close</button></div>
+      <div class="form-grid">
+        ${stat("Sections 1–4", markLabel(subtotal,40), sectionScores(marks).map((n,i) => "S" + (i+1) + " " + n + "/10").join(" · "))}
+        ${stat("Total", markLabel(total(item),100), item.grade ? "Includes essay mark" : "Essay mark pending")}
+      </div>
+      <details><summary>Review all 40 short answers</summary>
+        <div class="table-wrap" style="margin-top:9px"><table><thead><tr><th scope="col">Question</th><th scope="col">Response</th><th scope="col">Accepted answer</th><th scope="col">Mark</th></tr></thead>
+        <tbody>${KEY.map((accepted,i) => `<tr><th scope="row">${i+1}</th><td>${escapeHTML(item.answers[i].trim()) || "—"}</td><td>${accepted.join(" / ")}</td><td>${marks[i] ? "1 / 1" : "0 / 1"}</td></tr>`).join("")}</tbody></table></div>
+      </details>
+      <section class="stack-tight" aria-labelledby="essay-review-title">
+        <h3 id="essay-review-title">Section 5 · ${item.topic ? "Topic " + item.topic : "No topic selected"}</h3>
+        ${item.topic ? "<p class='small muted'>" + escapeHTML(TOPICS[item.topic].prompt) + "</p>" : ""}
+        <span class="pill${essayWords < MIN_WORDS ? " pending" : " good"}">${essayWords} words${essayWords < MIN_WORDS ? " · Below 250" : ""}</span>
+        <p class="essay-copy">${escapeHTML(item.essay) || "<em>No essay was entered.</em>"}</p>
+      </section>
+      <form id="mark-form" class="stack">
+        <div class="form-grid">
+          <label class="field">Essay mark / 60
+            <input type="number" name="mark" min="0" max="60" step="0.1" value="${item.grade?.mark ?? ""}" required>
+          </label>
+          <div class="stat"><span class="small muted">Total preview</span><strong id="preview-mark">${markLabel(total(item),100)}</strong></div>
+        </div>
+        <p class="small muted">Use your course’s marking criteria. The supplied answer key contains no essay scoring rubric.</p>
+        <label class="field">Teacher feedback <span class="sr-only">(optional)</span><textarea name="feedback" rows="3" maxlength="3000">${escapeHTML(item.grade?.feedback || "").replace(/^\n/, "&#10;")}</textarea></label>
+        <div class="actions"><button class="btn" type="submit">Save marks</button><button class="btn ghost" type="button" data-close>Cancel</button><button class="btn danger" type="button" id="remove-attempt">Remove attempt</button></div>
+      </form>
+    </div>`);
+  const form = $("#mark-form", dialog);
+  const entry = form.elements.namedItem("mark");
+  entry.oninput = () => {
+    $("#preview-mark", dialog).textContent = markLabel(entry.validity.valid ? subtotal + entry.valueAsNumber : null,100);
+  };
+  form.onsubmit = event => {
+    event.preventDefault();
+    const updated = roster();
+    const latest = updated.find(attempt => attempt.id === id);
+    if (!latest) {
+      dialog.close();
+      renderTeacher();
+      return;
+    }
+    latest.grade = {mark:entry.valueAsNumber, feedback:form.elements.namedItem("feedback").value.trim(), markedAt:Date.now()};
+    write(teacherKey, updated);
+    teacherMessage = {text:"Marks saved for " + latest.studentId + ".", tone:"ok"};
+    dialog.close();
+    renderTeacher();
+    $(`[data-attempt="${id}"]`)?.focus({preventScroll:true});
+  };
+  $("#remove-attempt", dialog).onclick = () => confirmRemoval(item);
+}
+
+function confirmRemoval(item) {
+  showDialog(`<div class="dialog-body stack">
+    <h2 id="dialog-title">Remove this attempt?</h2>
+    <p>This removes the imported submission and any saved marks for ${escapeHTML(item.studentId)} from this browser.</p>
+    <div class="actions"><button class="btn secondary" type="button" id="keep-attempt" autofocus>Keep attempt</button><button class="btn danger" type="button" id="confirm-remove">Remove attempt</button></div>
+  </div>`, true);
+  $("#keep-attempt", dialog).onclick = () => markAttempt(item.id);
+  $("#confirm-remove", dialog).onclick = () => {
+    write(teacherKey, roster().filter(attempt => attempt.id !== item.id));
+    teacherMessage = {text:"Removed the attempt for " + item.studentId + ".", tone:"ok"};
+    dialog.close();
+    render(true);
+  };
+}
+
+function mean(values) {
+  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+}
+
+function bar(label, value, max) {
+  const width = value === null ? 0 : Math.max(0, Math.min(100, value / max * 100));
+  return `<div class="bar-row"><span>${label}</span><div class="bar-track" aria-hidden="true"><span style="width:${width}%"></span></div><strong>${value === null ? "—" : displayNumber(width) + "%"}</strong></div>`;
+}
+
+function analysisContent(attempts) {
+  if (!attempts.length) return empty("No performance data yet","Import student work in Collected marks to see section averages and question accuracy.");
+  const selected = attempts.filter(item => groupMatches(item, analysisGroup));
+  const grades = selected.filter(item => item.grade);
+  const scored = selected.map(item => ({score:scoreAnswers(item.answers), item}));
+  const subtotal = mean(scored.map(({score}) => score.filter(Boolean).length));
+  const avgEssay = mean(grades.map(item => item.grade.mark));
+  const avgTotal = mean(grades.map(total));
+  const itemStats = KEY.map((accepted,i) => {
+    const correct = scored.filter(({score}) => score[i]).length;
+    return {q:i+1, correct, blank:selected.filter(item => !item.answers[i].trim()).length, accepted};
+  });
+  const weakest = [...itemStats].sort((a,b) => a.correct - b.correct || a.q - b.q).slice(0,5);
+  const sectionMarks = SECTIONS.slice(0,4).map((_,index) => mean(scored.map(({score}) => sectionScores(score)[index])));
+  return `
+    <div class="stack">
+      <div class="toolbar"><label for="analysis-class">Class</label><select id="analysis-class">${classOptions(attempts, analysisGroup)}</select></div>
+      ${!selected.length ? empty("No attempts for this class", "Choose another class to view its performance.") : `
+      <div class="stats">
+        ${stat("Attempts", selected.length, "In this class selection")}
+        ${stat("Short-answer average", markLabel(subtotal,40), "All attempts")}
+        ${stat("Essay average", markLabel(avgEssay,60), grades.length + " marked")}
+        ${stat("Overall average", markLabel(avgTotal,100), grades.length + " with final marks")}
+      </div>
+      <p class="small muted">Averages count each submitted attempt. Essay and overall averages use attempts with a saved essay mark.</p>
+      <div class="split">
+        <section class="panel stack" aria-labelledby="sections-summary">
+          <h2 id="sections-summary">Section averages</h2>
+          ${SECTIONS.map((item,i) => bar(item.name, i === 4 ? avgEssay : sectionMarks[i], item.marks)).join("")}
         </section>
+        <section class="panel stack" aria-labelledby="questions-summary">
+          <h2 id="questions-summary">Lowest accuracy</h2>
+          ${weakest.map(item => bar("Question " + item.q, item.correct, selected.length)).join("")}
+        </section>
+      </div>
+      <section class="panel stack" aria-labelledby="essay-summary">
+        <h2 id="essay-summary">Essay topics</h2>
+        <div class="table-wrap"><table>
+          <caption class="sr-only">Essay selections and marks by topic</caption>
+          <thead><tr><th scope="col">Topic</th><th scope="col">Attempts</th><th scope="col">Below 250 words</th><th scope="col">Marked</th><th scope="col">Average mark</th></tr></thead>
+          <tbody>${["A","B",""].map(letter => {
+            const items = selected.filter(item => item.topic === letter);
+            const marks = items.filter(item => item.grade).map(item => item.grade.mark);
+            return `<tr><th scope="row">${letter ? "Topic " + letter + " · " + TOPICS[letter].name : "No topic selected"}</th><td>${items.length}</td>
+            <td>${items.filter(item => words(item.essay) < MIN_WORDS).length}</td><td>${marks.length}</td><td>${markLabel(mean(marks),60)}</td></tr>`;
+          }).join("")}</tbody>
+        </table></div>
+      </section>
+      <section class="panel stack" aria-labelledby="full-question-summary"><h2 id="full-question-summary">Question accuracy</h2>
+        <div class="table-wrap"><table>
+          <caption class="sr-only">Short-answer performance for all 40 questions</caption>
+          <thead><tr><th scope="col">Question</th><th scope="col">Accepted answers</th><th scope="col">Correct</th><th scope="col">Blank</th><th scope="col">Accuracy</th></tr></thead>
+          <tbody>${itemStats.map(item => `<tr><th scope="row">${item.q}</th><td>${item.accepted.join(" / ")}</td>
+          <td>${item.correct} / ${selected.length}</td><td>${item.blank}</td><td>${displayNumber(item.correct / selected.length * 100)}%</td></tr>`).join("")}</tbody>
+        </table></div>
+      </section>`}
+    </div>`;
+}
 
-    </main>
+function referenceContent() {
+  return `<div class="stack">
+    <section class="panel stack" aria-labelledby="key-title">
+      <h2 id="key-title">Sections 1–4 answer key</h2>
+      <p class="muted small">Each accepted answer earns 1 mark. Spelling must match the key. Capitalisation and surrounding spaces are ignored.</p>
+      <div>${SECTIONS.slice(0,4).map((item,index) => `<details>
+        <summary>Section ${index+1} · ${item.name}</summary>
+        <div class="key-grid" style="margin-top:9px">${KEY.slice(index*10,index*10+10).map((accepted,i) => `<div><strong>${index*10+i+1}</strong> · ${accepted.join(" / ")}</div>`).join("")}</div>
+      </details>`).join("")}</div>
+    </section>
+    <section class="panel stack" aria-labelledby="models-title">
+      <h2 id="models-title">Section 5 model essays</h2>
+      <p class="small muted">Original practice examples showing different responses to the same prompt.</p>
+      ${Object.entries(TOPICS).map(([letter, topic]) => `<section class="stack-tight">
+        <h3>Topic ${letter} · ${topic.name}</h3><p class="muted">${escapeHTML(topic.prompt)}</p>
+        <div>${MODELS[letter].map(model => `<details>
+          <summary>${escapeHTML(model.title)}</summary>
+          <p class="small muted" style="margin-top:6px">${model.stance} · ${words(model.text)} words</p>
+          <p class="essay-copy">${escapeHTML(model.text)}</p>
+        </details>`).join("")}</div>
+      </section>`).join("")}
+    </section>
+  </div>`;
+}
 
-    <script>
-        const answerKey = {
-            q1: ['to'], q2: ['for'], q3: ['with'], q4: ['by'], q5: ['that', 'which'],
-            q6: ['it', 'this'], q7: ['the', 'any'], q8: ['where'], q9: ['is'], q10: ['those', 'ones', 'customers'],
-            q11: ['generated'], q12: ['experiences'], q13: ['achieves'], q14: ['accessible'], q15: ['changes'],
-            q16: ['concerns'], q17: ['expensive'], q18: ['worry'], q19: ['limit'], q20: ['replace'],
-            q21: ['being'], q22: ['are', 'appear', 'seem'], q23: ['means'], q24: ['on'], q25: ['be'],
-            q26: ['an'], q27: ['impact'], q28: ['which', 'that'], q29: ['these', 'the', 'those'], q30: ['for', 'to'],
-            q31: ['encountered'], q32: ['revolutionizing', 'revolutionising'], q33: ['unambiguous'], q34: ['rejection'], q35: ['consultation'],
-            q36: ['incapable'], q37: ['negatively'], q38: ['dominant'], q39: ['adjustment'], q40: ['irrational']
-        };
+function tick() {
+  const attempt = student();
+  if (attempt?.status !== "active") return;
+  if (attempt.deadline <= Date.now()) {
+    finalize(attempt, true);
+    return;
+  }
+  const clock = $("#clock", screen);
+  if (clock) {
+    clock.textContent = currentClock(attempt.deadline);
+    clock.parentElement.classList.toggle("urgent", attempt.deadline - Date.now() <= 5 * 60 * 1000);
+  }
+}
 
-        function toggleEssay(id) {
-            const el = document.getElementById(id);
-            if (el.classList.contains('hidden')) {
-                el.classList.remove('hidden');
-            } else {
-                el.classList.add('hidden');
-            }
-        }
-
-        document.getElementById('submit-btn').addEventListener('click', () => {
-            let score = 0;
-            const total = 40;
-
-            for (let i = 1; i <= total; i++) {
-                const inputEl = document.getElementById('q' + i);
-                if(!inputEl) continue;
-                
-                const userVal = inputEl.value.trim().toLowerCase();
-                const correctArr = answerKey['q' + i].map(v => v.toLowerCase());
-
-                inputEl.classList.remove('correct', 'incorrect');
-
-                if (userVal && correctArr.includes(userVal)) {
-                    inputEl.classList.add('correct');
-                    score++;
-                } else {
-                    inputEl.classList.add('incorrect');
-                }
-            }
-
-            // Display Score
-            const scoreDisplay = document.getElementById('score-display');
-            const scoreVal = document.getElementById('score-val');
-            scoreVal.innerText = score;
-            scoreDisplay.classList.remove('hidden');
-
-            // Show Answers Keys
-            document.getElementById('ans1').innerHTML = "<strong>Correct Answers (Sec 1):</strong> 1. to | 2. for | 3. with | 4. by | 5. that/which | 6. it/this | 7. the/any | 8. where | 9. is | 10. those/ones/customers";
-            document.getElementById('ans1').classList.remove('hidden');
-            
-            document.getElementById('ans2').innerHTML = "<strong>Correct Answers (Sec 2):</strong> 11. generated | 12. experiences | 13. achieves | 14. accessible | 15. changes | 16. concerns | 17. expensive | 18. worry | 19. limit | 20. replace";
-            document.getElementById('ans2').classList.remove('hidden');
-
-            document.getElementById('ans3').innerHTML = "<strong>Correct Answers (Sec 3):</strong> 21. being | 22. are/appear/seem | 23. means | 24. on | 25. be | 26. an | 27. impact | 28. which/that | 29. these/the/those | 30. for/to";
-            document.getElementById('ans3').classList.remove('hidden');
-
-            document.getElementById('ans4').innerHTML = "<strong>Correct Answers (Sec 4):</strong> 31. encountered | 32. revolutionizing/revolutionising | 33. unambiguous | 34. rejection | 35. consultation | 36. incapable | 37. negatively | 38. dominant | 39. adjustment | 40. irrational";
-            document.getElementById('ans4').classList.remove('hidden');
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
+$("#home-link").onclick = () => navigate("home");
+$("#student-link").onclick = () => navigate("student");
+$("#teacher-link").onclick = () => navigate("teacher");
+window.addEventListener("storage", event => {
+  if (event.key === studentKey && view === "student" && !newAttempt) {
+    if (dialog.open) dialog.close();
+    renderStudent();
+  }
+  if (event.key === teacherKey && view === "teacher" && !dialog.open) renderTeacher();
+});
+document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+tick();
+render();
+setInterval(tick,1000);
+</script>
 </body>
 </html>
